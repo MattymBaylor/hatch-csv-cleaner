@@ -91,7 +91,8 @@ if uploaded:
         df_in = load_csv_any(f)
         cleaned = clean(df_in)
         st.write(f"File: {f.name} — Rows read: {len(df_in)}, Rows output: {len(cleaned)}")
-        st.dataframe(cleaned.head(20), use_container_width=True)
+        # Streamlit deprecated `use_container_width`; use `width='stretch'` for full width.
+        st.dataframe(cleaned.head(20), width='stretch')
         csv_bytes = to_csv_bytes(cleaned, f.name)
         st.download_button(
             label=f"⬇️ Download cleaned: hatch_cleaned_{f.name}",
@@ -110,11 +111,24 @@ if uploaded:
             mime="text/csv"
         )
 else:
-    st.markdown("""
-    - Keeps exactly these columns: **First Name**, **Last Name**, **Email**, **Phone**, **Status**
-    - Name rules: hyphens/apostrophes capitalized (e.g., Mary-Anne, O’Brien). Uses the first token only.
-    - Email is lowercased and trimmed; Phone retains only digits (trimming a leading '1' if length ≥11).
-    - Drops `match_score`, `score`, `salary`, `desired_salary` and all other columns.
-    - Removes a completely empty first row.
-    - Outputs UTF‑8 CSV files named `hatch_cleaned_{original}.csv`.
-    """)
+    # Display a brief summary explaining what this app does. This summary
+    # appears below the file uploader and above the technical bullet list
+    # describing the processing rules.
+    st.markdown(
+        """
+        **Internal use only:** This tool reviews your CSV data and cleans or re‑formats it for Hatch. It removes unnecessary columns, normalizes phone numbers and emails to improve deliverability, and adjusts names (including middle initials and extended last names). First names in ALL CAPS are converted to proper case for consistent SMS texting.
+        """
+    )
+
+    # Technical details bullet list for reference. This sits below the
+    # summary so users know exactly how the data is handled.
+    st.markdown(
+        """
+        - Keeps exactly these columns: **First Name**, **Last Name**, **Email**, **Phone**, **Status**
+        - Name rules: hyphens/apostrophes capitalized (e.g., Mary‑Anne, O’Brien). Uses the first token only.
+        - Email is lowercased and trimmed; Phone retains only digits (trimming a leading '1' if length ≥11).
+        - Drops `match_score`, `score`, `salary`, `desired_salary` and all other columns.
+        - Removes a completely empty first row.
+        - Outputs UTF‑8 CSV files named `hatch_cleaned_{original}.csv`.
+        """
+    )
