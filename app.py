@@ -5,6 +5,15 @@ import streamlit as st
 
 st.set_page_config(page_title="Hatch CSV Cleaner", page_icon="🧹", layout="centered")
 st.title("Hatch CSV Cleaner 🧹")
+
+# Add a sub‑heading underneath the main title to show branding. This line uses
+# Streamlit's subheader API to display a smaller heading below the page
+# title. Adjust the text here to customize your branding.
+st.subheader("Created for HGE Recruiting by M. Martelli")
+
+# Provide a short caption describing what the app does. The caption sits
+# under the sub‑heading and explains to your colleagues that nothing is
+# stored when they upload files.
 st.caption("Upload vendor CSV → get a cleaned file for Hatch. Nothing is stored.")
 
 EXPECTED = ["First Name", "Last Name", "Email", "Phone", "Status"]
